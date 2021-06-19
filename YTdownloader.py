@@ -13,7 +13,7 @@ elif len(sys.argv) == 3:
             YouTube(sys.argv[1]).streams.get_audio_only().download()
             print("Download Complete")
         except:
-            print("Failed to Download")
+            print("Failed to Download")    
     else:
         print("Invalid Arguments")
 else:
