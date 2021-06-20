@@ -14,6 +14,7 @@ elif len(sys.argv) >2:  #if the argument list is longer than 1
         yt = YouTube(sys.argv[1])   #First, try to lookup the URL given in the first argument
         stream = yt.streams.first() #by default, just get the first steam in the list
         name = yt.title + ".mp4"    #by default the name is the title of the video
+        path = "."
     except:
         print("invalid URL")    #if it fails the URL is invalid
 
@@ -31,6 +32,9 @@ elif len(sys.argv) >2:  #if the argument list is longer than 1
         elif i =="-n":  #-n is followed by the desired name for the file
             name = sys.argv[argument+1] #store the next argument as the new name
             isHelperArgument = True #signal that the next argument is a helper
+        elif i == "-p": # -p sets the path where the video should be downloaded
+            path = sys.argv[argument + 1]   #Set the path the the next argument
+            isHelperArgument = True         #Signal that the next argument is a helper
         else:   #if the argument is not a -option
             if isHelperArgument:    #check to see if is a helper   
                 isHelperArgument = False
@@ -39,7 +43,7 @@ elif len(sys.argv) >2:  #if the argument list is longer than 1
                 break
         argument += 1
     try:
-        stream.download(filename= name)
+        stream.download(output_path = path, filename = name)
     except:
         print("failed to Download")
 else:
