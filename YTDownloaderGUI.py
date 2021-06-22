@@ -4,28 +4,34 @@ from tkinter import messagebox as mb
 from pytube import *
 
 def onButtonPress():
+    EnterButton["state"] = DISABLED
     path = fd.asksaveasfilename()
-    
     temp = path.split("/")
+    path=""
+    for i in range(len(temp) - 1):
+        path = path + temp[i]
+        path = path + "/"
     last = len(temp)
     fileName = temp[last-1]
-    print(fileName)
-
-    print(UrlInput.get())
     try:
-        pass
         yt = YouTube(UrlInput.get())
     except:
-       pass
-       mb.showerror("Ru Ro Raggy", "Invalid URL")
+       mb.showerror("URL ERROR", "Invalid URL")
+       exit()
+    
+    try:
+        yt.streams.first().download(output_path=path, filename=fileName)
+    except:
+        mb.showerror("DOWNLOAD ERROR", "Failed to Download")
+        exit()
 
-
-
+    mb.showinfo("Success", "Download Complete!")
+    exit()
 root = Tk()
 root.title("YouTube Download Tool")
 root.iconbitmap('res/YTDownloader_Icon.ico')
 
-frame = Frame(root)
+frame = Frame(root, pady=20, padx= 100)
 frame.pack()
 
 frameBot = Frame(root)
