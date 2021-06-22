@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import filedialog as fd
 from tkinter import messagebox as mb
 from pytube import *
+import sys
 
 def onButtonPress():
     EnterButton["state"] = DISABLED
@@ -17,16 +18,16 @@ def onButtonPress():
         yt = YouTube(UrlInput.get())
     except:
        mb.showerror("URL ERROR", "Invalid URL")
-       exit()
+       sys.exit()
     
     try:
         yt.streams.first().download(output_path=path, filename=fileName)
     except:
         mb.showerror("DOWNLOAD ERROR", "Failed to Download")
-        exit()
+        sys.exit()
 
     mb.showinfo("Success", "Download Complete!")
-    exit()
+    sys.exit()
 root = Tk()
 root.title("YouTube Download Tool")
 root.iconbitmap('res/YTDownloader_Icon.ico')
