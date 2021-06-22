@@ -1,17 +1,30 @@
-from typing import Tuple
 from pytube import YouTube
 import sys
+import math
+
+def handleProgress(stream, chunk, bytes_remaining):     #function that displays the progress of the download
+    total = size    #store the total file size
+    percent = math.floor(((total - bytes_remaining)/total) * 100)
+    full = "#" * percent 
+    empty = "-" * (100 - percent)
+    msg = "DOWNLOADING:[{}{}]"
+    #print(empty)
+    print(msg.format(full, empty),end='\r')  #compare the total minus the complete to the total
+
+def handleComplete(stream, file_path):  #Displays a message to show that the download has finnished
+    print("DOWNLOADING:[####################################################################################################]")
 
 if len(sys.argv) == 2:  #if there is only 1 argument (argument 0 is the name of the script)   
     try:    
-        YouTube(sys.argv[1]).streams.first().download()     #try to lookup the first argument as a YT URL, select the first strem and download it
-        print("download Complete")
+        yt = YouTube(sys.argv[1],on_progress_callback=handleProgress,on_complete_callback=handleComplete).streams.first()
+        size = yt.filesize
+        yt.download()    #try to lookup the first argument as a YT URL, select the first strem and download it
     except: 
         print("failed to download") #if the download fails tell the user and exit
 elif len(sys.argv) >2:  #if the argument list is longer than 1
     isHelperArgument = False    #Signals that the argument was intended to be used with another
     try:
-        yt = YouTube(sys.argv[1])   #First, try to lookup the URL given in the first argument
+        yt = YouTube(sys.argv[1], on_progress_callback=handleProgress, on_complete_callback=handleComplete)   #First, try to lookup the URL given in the first argument
         stream = yt.streams.first() #by default, just get the first steam in the list
         name = yt.title + ".mp4"    #by default the name is the title of the video
         path = "."
@@ -43,6 +56,7 @@ elif len(sys.argv) >2:  #if the argument list is longer than 1
                 break
         argument += 1
     try:
+        size = stream.filesize
         stream.download(output_path = path, filename = name)
     except:
         print("failed to Download")
