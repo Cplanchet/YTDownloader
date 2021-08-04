@@ -31,8 +31,8 @@ def onButtonPress():    #Handles the Download once the Button is presses (This f
         yt = YouTube(UrlInput.get(), on_progress_callback=handleProgress, on_complete_callback=handleEnd)   #Create a YouTube object with the entered URL
         global total
         if Checked.get() == 0:
-            total = yt.streams.first().filesize     #if the does not want an audio only string, store the file size and download stream
-            stream = yt.streams.first()
+            total = yt.streams.get_highest_resolution().filesize     #if the does not want an audio only string, store the file size and download stream
+            stream = yt.streams.get_highest_resolution()
         else:
             total = yt.streams.get_audio_only().filesize    #if the user wants an audio only stream, record the filesize and download string
             stream = yt.streams.get_audio_only()
